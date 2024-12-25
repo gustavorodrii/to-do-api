@@ -1,5 +1,5 @@
-// gustavojpn97
-// PzWkGg4V7LiYsnUb
-
-
-
+module.exports = {
+    registerRoutes: require('./routes/register'),
+    loginRoutes: require('./routes/login'),
+    todoRoutes: require('./routes/todo'),
+};
