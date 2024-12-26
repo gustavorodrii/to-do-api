@@ -11,7 +11,7 @@ router.post('/', async (req, res) => {
             where: { email },
         });
         if (user && user.password === password) {
-            res.status(200).json({ message: 'Login bem-sucedido', id: user.id });
+            res.status(200).json({ message: 'Login bem-sucedido', id: user.id, name: user.name, email: user.email });
         } else {
             res.status(401).json({ error: 'Credenciais inválidas' });
         }
