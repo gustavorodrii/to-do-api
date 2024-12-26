@@ -3,9 +3,9 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 app.use(express.json());
-const registerRoutes = require('./src/routes/register');
-const loginRoutes = require('./src/routes/login');
-const todoRoutes = require('./src/routes/todo');
+const registerRoutes = require('./routes/register');
+const loginRoutes = require('./routes/login');
+const todoRoutes = require('./routes/todo');
 
 // Middleware para JSON
 app.use(express.json());
