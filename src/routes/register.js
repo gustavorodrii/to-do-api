@@ -7,6 +7,14 @@ const prisma = new PrismaClient();
 router.post('/', async (req, res) => {
     const { name, password, email } = req.body;
     try {
+        const existingUser = await prisma.user.findUnique({
+            where: { email },
+        });
+
+        if (existingUser) {
+            return res.status(400).json({ error: 'Email já cadastrado.' });
+        }
+
         const newUser = await prisma.user.create({
             data: { name, password, email },
         });
