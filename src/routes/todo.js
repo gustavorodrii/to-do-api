@@ -16,15 +16,7 @@ router.post('/:userId', async (req, res) => {
                 completed: completed || false,
                 userId,
                 reminder: reminder ? new Date(reminder) : null,
-            },
-            select: {
-                id: true,
-                title: true,
-                description: true,
-                completed: true,
-                reminder: true,
-                userId: true,
-                createdAt: true,
+                createdAt: new Date(),
             },
         });
         res.status(201).json(newTodo);
