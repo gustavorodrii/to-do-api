@@ -17,6 +17,15 @@ router.post('/:userId', async (req, res) => {
                 userId,
                 reminder: reminder ? new Date(reminder) : null,
             },
+            select: {
+                id: true,
+                title: true,
+                description: true,
+                completed: true,
+                reminder: true,
+                userId: true,
+                createdAt: true,
+            },
         });
         res.status(201).json(newTodo);
     } catch (error) {
