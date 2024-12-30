@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 // Criar uma tarefa
 router.post('/:userId', async (req, res) => {
     const { userId } = req.params;
-    const { title, description, completed, reminder, createdAt } = req.body;
+    const { title, description, completed, reminder, createdWhen } = req.body;
 
     try {
         const newTodo = await prisma.toDo.create({
@@ -16,7 +16,7 @@ router.post('/:userId', async (req, res) => {
                 completed: completed || false,
                 userId,
                 reminder: reminder ? new Date(reminder) : null,
-                createdAt: createdAt ? new Date(createdAt) : null,
+                createdWhen: createdWhen ? new Date(createdWhen) : null,
             },
         });
         res.status(201).json(newTodo);
@@ -33,6 +33,14 @@ router.get('/:userId', async (req, res) => {
     try {
         const todos = await prisma.toDo.findMany({
             where: { userId: userId },
+            select: {
+                id: true,
+                title: true,
+                description: true,
+                completed: true,
+                reminder: true,
+                createdWhen: true,
+            },
         });
         res.status(200).json(todos);
     } catch (error) {
