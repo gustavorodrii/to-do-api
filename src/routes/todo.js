@@ -33,14 +33,7 @@ router.get('/:userId', async (req, res) => {
     try {
         const todos = await prisma.toDo.findMany({
             where: { userId: userId },
-            select: {
-                id: true,
-                title: true,
-                description: true,
-                completed: true,
-                reminder: true,
-                createdWhen: true,
-            },
+
         });
         res.status(200).json(todos);
     } catch (error) {
