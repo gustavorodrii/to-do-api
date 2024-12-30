@@ -20,7 +20,6 @@ router.post('/:userId', async (req, res) => {
 
             },
         });
-        console.log('Tarefa criada:', newTodo);
         res.status(201).json(newTodo);
     } catch (error) {
         console.error(error);
