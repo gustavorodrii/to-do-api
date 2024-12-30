@@ -23,7 +23,7 @@ router.post('/:userId', async (req, res) => {
         res.status(201).json(newTodo);
     } catch (error) {
         console.error(error.message);
-        res.status(500).json({ error: 'Erro ao criar tarefa' });
+        res.status(500).json({ error: error.message });
     }
 });
 
