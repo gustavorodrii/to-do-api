@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 // Criar uma tarefa
 router.post('/:userId', async (req, res) => {
     const { userId } = req.params;
-    const { title, description, completed, reminder } = req.body;
+    const { title, description, completed, reminder, completedDate } = req.body;
 
     try {
         const newTodo = await prisma.toDo.create({
@@ -16,6 +16,7 @@ router.post('/:userId', async (req, res) => {
                 completed: completed || false,
                 userId,
                 reminder: reminder ? new Date(reminder) : null,
+                completedDate: completedDate || false,
 
             },
         });
@@ -43,7 +44,7 @@ router.get('/:userId', async (req, res) => {
 // Atualizar uma tarefa
 router.put('/:taskId', async (req, res) => {
     const { taskId } = req.params;
-    const { title, description, completed } = req.body;
+    const { title, description, completed, completedDate } = req.body;
 
     try {
         const updatedTodo = await prisma.toDo.update({
@@ -52,6 +53,7 @@ router.put('/:taskId', async (req, res) => {
                 title,
                 description,
                 completed,
+                completedDate,
             },
         });
         res.status(200).json(updatedTodo);
