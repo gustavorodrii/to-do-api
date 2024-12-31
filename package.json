@@ -14,7 +14,8 @@
     "express": "^4.21.2",
     "i": "^0.3.7",
     "jsonwebtoken": "^9.0.2",
-    "mongodb": "^6.12.0"
+    "mongodb": "^6.12.0",
+    "vercel": "^39.2.2"
   },
   "devDependencies": {
     "prisma": "^6.1.0"
