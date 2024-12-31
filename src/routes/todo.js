@@ -37,7 +37,7 @@ router.get('/:userId', async (req, res) => {
         });
         res.status(200).json(todos);
     } catch (error) {
-        res.status(500).json({ error: 'Erro ao buscar tarefas' });
+        res.status(500).json({ error: error.message });
     }
 });
 
