@@ -58,7 +58,7 @@ router.put('/:taskId', async (req, res) => {
         });
         res.status(200).json(updatedTodo);
     } catch (error) {
-        res.status(500).json({ error: 'Erro ao atualizar tarefa' });
+        res.status(500).json({ error: error.message });
     }
 });
 
