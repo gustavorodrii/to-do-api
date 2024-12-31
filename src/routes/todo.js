@@ -16,7 +16,7 @@ router.post('/:userId', async (req, res) => {
                 completed: completed || false,
                 userId,
                 reminder: reminder ? new Date(reminder) : null,
-                completedDate: completedDate || false,
+                completedDate: completedDate ? new Date(completedDate) : null,
 
             },
         });
