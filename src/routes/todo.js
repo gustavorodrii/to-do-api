@@ -81,7 +81,7 @@ router.delete('/:taskId', async (req, res) => {
     }
 });
 
-router.get('/top-consecutive', async (req, res) => {
+router.get('/topconsecutive', async (req, res) => {
     try {
         const topUsers = await prisma.user.findMany({
             orderBy: { consecutiveDays: 'desc' },
