@@ -40,7 +40,7 @@ router.get('/:userId', async (req, res) => {
         });
 
         const consecutiveDays = calculateConsecutiveDays(todos);
-        res.status(200).json(todos, consecutiveDays);
+        res.status(200).json({ todos: todos, consecutiveDays: consecutiveDays });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
