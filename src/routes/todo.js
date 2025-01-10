@@ -86,14 +86,17 @@ router.get('/top-consecutive', async (req, res) => {
         const topUsers = await prisma.user.findMany({
             orderBy: { consecutiveDays: 'desc' },
             take: 10,
-            select: { id: true, name: true, consecutiveDays: true, email: true },
+            select: { name: true, consecutiveDays: true, email: true },
         });
 
+        console.log(topUsers);
         res.status(200).json(topUsers);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.log("Erro no Prisma:", error);
+        res.status(500).json({ error: error });
     }
 });
+
 
 
 async function updateConsecutiveDays(userId) {
