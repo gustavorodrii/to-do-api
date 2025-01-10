@@ -97,7 +97,7 @@ router.get('/top-consecutive', async (req, res) => {
 async function updateConsecutiveDays(userId) {
     const tasks = await prisma.toDo.findMany({
         where: { userId },
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: 'desc' },  // Ordena pela data de criação (mais recente primeiro)
     });
 
     const consecutiveDays = calculateConsecutiveDays(tasks);
@@ -110,25 +110,26 @@ async function updateConsecutiveDays(userId) {
 
 
 function calculateConsecutiveDays(tasks) {
+    // Ordena as tarefas pela data de criação (da mais recente para a mais antiga)
     tasks.sort((a, b) => b.createdAt - a.createdAt);
 
     let consecutiveDays = 0;
-    let currentDay = new Date();
-    currentDay.setHours(0, 0, 0, 0);
-    let lastTaskDate = currentDay;
+    let lastTaskDate = null;
 
     for (const task of tasks) {
         const taskDate = new Date(task.createdAt);
-        taskDate.setHours(0, 0, 0, 0);
+        taskDate.setHours(0, 0, 0, 0); // Zera as horas para comparar apenas a data
 
-        if (taskDate.getTime() === lastTaskDate.getTime() ||
-            taskDate.getTime() === lastTaskDate.getTime() - 86400000) {
+        // Se for o primeiro dia ou se a tarefa foi criada no dia seguinte da última tarefa
+        if (!lastTaskDate || taskDate.getTime() === lastTaskDate.getTime() - 86400000) {
             consecutiveDays++;
             lastTaskDate = taskDate;
-        } else {
+        } else if (taskDate.getTime() !== lastTaskDate.getTime()) {
+            // Se a tarefa não foi criada no mesmo dia ou no dia seguinte, zera os dias consecutivos
             break;
         }
     }
+
     return consecutiveDays;
 }
 
