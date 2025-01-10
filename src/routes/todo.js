@@ -122,17 +122,23 @@ function calculateConsecutiveDays(tasks) {
     return consecutiveDays;
 }
 
-router.get('/allusers', async (req, res) => {
+// Listar top 10 usuários com mais dias consecutivos
+router.get('/', async (req, res) => {
     try {
-        const users = await prisma.user.findMany();
+        // Busca todos os usuários e ordena pelo número de dias consecutivos em ordem decrescente
+        const topUsers = await prisma.user.findMany({
+            orderBy: {
+                consecutiveDays: 'desc',
+            },
+            take: 10,  // Limita a busca aos 10 primeiros usuários
+        });
 
-        res.status(200).json(users);
+        res.status(200).json(topUsers);
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ error: error.message });
     }
 });
-
 
 
 module.exports = router;
