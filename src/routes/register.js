@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
         }
 
         const newUser = await prisma.user.create({
-            data: { name, password, email },
+            data: { name, password, email, consecutiveDays: 0 },
         });
         res.status(201).json(newUser);
     } catch (error) {
