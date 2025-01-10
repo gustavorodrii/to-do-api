@@ -20,6 +20,9 @@ router.post('/:userId', async (req, res) => {
 
             },
         });
+
+        await updateConsecutiveDays(userId);
+
         res.status(201).json(newTodo);
     } catch (error) {
         console.error(error.message);
@@ -75,5 +78,58 @@ router.delete('/:taskId', async (req, res) => {
         res.status(500).json({ error: 'Erro ao deletar tarefa' });
     }
 });
+
+router.get('/top-consecutive', async (req, res) => {
+    try {
+        const topUsers = await prisma.user.findMany({
+            orderBy: { consecutiveDays: 'desc' },
+            take: 10,
+            select: { id: true, name: true, consecutiveDays: true, email: true },
+        });
+
+        res.status(200).json(topUsers);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+async function updateConsecutiveDays(userId) {
+    const tasks = await prisma.toDo.findMany({
+        where: { userId },
+        orderBy: { createdAt: 'desc' },
+    });
+
+    const consecutiveDays = calculateConsecutiveDays(tasks);
+
+    await prisma.user.update({
+        where: { id: userId },
+        data: { consecutiveDays },
+    });
+}
+
+
+function calculateConsecutiveDays(tasks) {
+    tasks.sort((a, b) => b.createdAt - a.createdAt);
+
+    let consecutiveDays = 0;
+    let currentDay = new Date();
+    currentDay.setHours(0, 0, 0, 0);
+    let lastTaskDate = currentDay;
+
+    for (const task of tasks) {
+        const taskDate = new Date(task.createdAt);
+        taskDate.setHours(0, 0, 0, 0);
+
+        if (taskDate.getTime() === lastTaskDate.getTime() ||
+            taskDate.getTime() === lastTaskDate.getTime() - 86400000) {
+            consecutiveDays++;
+            lastTaskDate = taskDate;
+        } else {
+            break;
+        }
+    }
+    return consecutiveDays;
+}
 
 module.exports = router;
