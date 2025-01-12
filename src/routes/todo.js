@@ -129,6 +129,12 @@ router.get('/consecutiveDaysUsers/:userId', async (req, res) => {
         // Obter o usuário atual
         const actualUser = await prisma.user.findUnique({
             where: { id: userId },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                consecutiveDays: true,
+            },
         });
 
         if (!actualUser) {
@@ -141,6 +147,12 @@ router.get('/consecutiveDaysUsers/:userId', async (req, res) => {
                 consecutiveDays: 'desc',
             },
             take: 10,
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                consecutiveDays: true,
+            },
         });
 
         res.status(200).json({
