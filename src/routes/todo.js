@@ -99,7 +99,6 @@ async function updateConsecutiveDays(userId) {
 
 
 function calculateConsecutiveDays(tasks) {
-    // Ordena as tarefas pela data de criação (da mais recente para a mais antiga)
     tasks.sort((a, b) => b.createdAt - a.createdAt);
 
     let consecutiveDays = 0;
@@ -107,20 +106,25 @@ function calculateConsecutiveDays(tasks) {
 
     for (const task of tasks) {
         const taskDate = new Date(task.createdAt);
-        taskDate.setHours(0, 0, 0, 0); // Zera as horas para comparar apenas a data
+        taskDate.setHours(0, 0, 0, 0);
 
-        // Se for o primeiro dia ou se a tarefa foi criada no dia seguinte da última tarefa
-        if (!lastTaskDate || taskDate.getTime() === lastTaskDate.getTime() - 86400000) {
+        if (!lastTaskDate) {
             consecutiveDays++;
             lastTaskDate = taskDate;
-        } else if (taskDate.getTime() !== lastTaskDate.getTime()) {
-            // Se a tarefa não foi criada no mesmo dia ou no dia seguinte, zera os dias consecutivos
-            break;
+        } else {
+            const diffDays = Math.floor((lastTaskDate - taskDate) / (1000 * 60 * 60 * 24));
+            if (diffDays === 1) {
+                consecutiveDays++;
+                lastTaskDate = taskDate;
+            } else if (diffDays > 1) {
+                break;
+            }
         }
     }
 
     return consecutiveDays;
 }
+
 
 router.get('/consecutiveDaysUsers/:userId', async (req, res) => {
     const { userId } = req.params;
