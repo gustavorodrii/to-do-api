@@ -109,21 +109,25 @@ function calculateConsecutiveDays(tasks) {
         taskDate.setHours(0, 0, 0, 0);
 
         if (!lastTaskDate) {
+            // Primeira tarefa: começa a contagem
             consecutiveDays++;
             lastTaskDate = taskDate;
         } else {
             const diffDays = Math.floor((lastTaskDate - taskDate) / (1000 * 60 * 60 * 24));
+
             if (diffDays === 1) {
                 consecutiveDays++;
                 lastTaskDate = taskDate;
             } else if (diffDays > 1) {
-                break;
+                consecutiveDays = 0;
+                lastTaskDate = null;
             }
         }
     }
 
     return consecutiveDays;
 }
+
 
 
 router.get('/consecutiveDaysUsers/:userId', async (req, res) => {
